@@ -27,6 +27,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthAPI from '@/api/auth'
+import {ElMessage} from "element-plus";
 
 const router = useRouter()
 const registerForm = ref(null)
@@ -59,6 +60,7 @@ const handleRegister = async () => {
     loading.value = true
 
     await AuthAPI.register(form.value)
+    ElMessage.success("注册成功")
 
     await router.push('/')
   } catch (error) {

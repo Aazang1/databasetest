@@ -20,9 +20,6 @@ public class Notification {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "is_read", nullable = false)
-    private boolean isRead = false;
-
 
     @Column(nullable = false)
     private String type;
@@ -30,15 +27,9 @@ public class Notification {
     @Column(name = "created_at", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
-
-    @Column(name = "read_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date readAt;
-
     @JoinColumn(name = "senderid", nullable = false)
     private String senderid;
-    @Column(name = "receiverid", nullable = false)
-    private String receiverid;
+
 
 
 
@@ -81,13 +72,7 @@ public class Notification {
         this.content = content;
     }
 
-    public boolean isRead() {
-        return isRead;
-    }
 
-    public void setRead(boolean read) {
-        isRead = read;
-    }
 
 
     public Date getCreatedAt() {
@@ -98,13 +83,7 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    public Date getReadAt() {
-        return readAt;
-    }
 
-    public void setReadAt(Date readAt) {
-        this.readAt = readAt;
-    }
 
 
     public String getSenderid() {
@@ -115,11 +94,5 @@ public class Notification {
         this.senderid = senderid;
     }
 
-    public String getReceiverid() {
-        return receiverid;
-    }
 
-    public void setReceiverid(String receiverid) {
-        this.receiverid = receiverid;
-    }
 }

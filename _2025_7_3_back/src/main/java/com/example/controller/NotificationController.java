@@ -1,6 +1,9 @@
 package com.example.controller;
 
 import com.example.entity.Notification;
+import com.example.entity.NotificationReceiver;
+import com.example.entity.dto.NotificationDTO;
+import com.example.entity.dto.NotificationWithStatusDTO;
 import com.example.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,21 +20,20 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping
-    public ResponseEntity<List<Notification>> getAllNotifications(@RequestParam String username) {
-        System.out.println(username);
-        List<Notification> notifications = notificationService.getAllNotificationsForCurrentUser(username);
+    public ResponseEntity<List<NotificationWithStatusDTO>> getAllNotifications(@RequestParam String username) {
+        List<NotificationWithStatusDTO> notifications = notificationService.getAllNotificationsForCurrentUser(username);
         return ResponseEntity.ok(notifications);
     }
 
     @PostMapping
-    public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
-        Notification createdNotification = notificationService.createNotification(notification);
+    public ResponseEntity<Notification> createNotification(@RequestBody NotificationDTO notificationDTO) {
+        Notification createdNotification = notificationService.createNotification(notificationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNotification);
     }
 
     @PatchMapping("/{id}/read")
-    public ResponseEntity<Notification> markAsRead(@PathVariable Long id) {
-        Notification updatedNotification = notificationService.markNotificationAsRead(id);
+    public ResponseEntity<NotificationReceiver> markAsRead(@PathVariable Long id) {
+        NotificationReceiver updatedNotification = notificationService.markNotificationAsRead(id);
         return ResponseEntity.ok(updatedNotification);
     }
 

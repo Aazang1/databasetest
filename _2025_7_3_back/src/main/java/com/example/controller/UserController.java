@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -41,6 +43,7 @@ public class UserController {
 //        User user = userService.getCurrentUser();
 //        return ResponseEntity.ok(user);
 //    }
+
     @GetMapping("/hello")
     public String hello(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -48,6 +51,11 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         return "Hello1," + authentication.getName() + "!";
+    }
+    @GetMapping
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users=userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
 }

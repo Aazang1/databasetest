@@ -16,8 +16,15 @@ const logout = async () => {
     await axios.post(`${API_URL}/logout`)
 }
 
+const getalluesrs = async () => {
+  const response= await axios.get(`${API_URL}`)
+    return response.data
+}
+
+
 export default {
     register,
     login,
-    logout
+    logout,
+    getalluesrs
 }

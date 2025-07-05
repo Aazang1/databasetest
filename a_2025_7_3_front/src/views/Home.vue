@@ -46,12 +46,12 @@
           <message-notification class="notification-icon" />
 
           <!-- 用户角色显示 -->
-          <el-tag class="role-tag" type="info" effect="plain">{{ userRole }}</el-tag>
+<!--          <el-tag class="role-tag" type="info" effect="plain">{{ userRole }}</el-tag>-->
 
           <el-dropdown>
             <span class="user-info">
               <el-avatar :size="32" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
-              <span class="username">{{ realName }}</span>
+<!--              <span class="username">{{ realName }}</span>-->
             </span>
             <template #dropdown>
               <el-dropdown-menu>

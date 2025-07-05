@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -23,8 +28,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
 //            throw new EmailAlreadyExistsException();
         }
+        LocalDate localDate = LocalDate.now();
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         // 直接保存密码，不加密（仅适用于开发/测试环境）
+        user.setCreatedAt(date);
+        user.setUpdatedAt(date);
         return userRepository.save(user);
     }
 
@@ -55,6 +64,11 @@ public class UserServiceImpl implements UserService {
         else{
             return "success";
         }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 

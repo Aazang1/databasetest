@@ -2,15 +2,18 @@ package com.example.service;
 
 
 import com.example.entity.Notification;
+import com.example.entity.NotificationReceiver;
+import com.example.entity.dto.NotificationDTO;
+import com.example.entity.dto.NotificationWithStatusDTO;
 
 import java.util.List;
 
 public interface NotificationService {
-    List<Notification> getAllNotificationsForCurrentUser(String username);
+    List<NotificationWithStatusDTO> getAllNotificationsForCurrentUser(String username);
 
-    Notification createNotification(Notification notification);
+    Notification createNotification(NotificationDTO notificationDTO);
 
-    Notification markNotificationAsRead(Long id);
+    NotificationReceiver markNotificationAsRead(Long id);
 
     void deleteNotification(Long id);
 
