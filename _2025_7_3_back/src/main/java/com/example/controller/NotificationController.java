@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dao.NotificationRepository;
 import com.example.entity.Notification;
 import com.example.entity.NotificationReceiver;
 import com.example.entity.dto.NotificationDTO;
@@ -18,6 +19,9 @@ public class NotificationController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @GetMapping
     public ResponseEntity<List<NotificationWithStatusDTO>> getAllNotifications(@RequestParam String username) {
@@ -41,5 +45,17 @@ public class NotificationController {
     public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);
         return ResponseEntity.noContent().build();
+    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<List<NotificationDTO>> GetSendNotification(@PathVariable String id) {
+//
+//        List<NotificationDTO> notificationDTOS=notificationRepository.findNotificationsWithReceivers(id);
+//        return ResponseEntity.ok(notificationDTOS);
+//    }
+
+    @GetMapping("/{senderid}")
+    public ResponseEntity<List<NotificationDTO>> getBySender(@PathVariable String senderid) {
+        List<NotificationDTO> result = notificationService.getNotificationsWithReceivers(senderid);
+        return ResponseEntity.ok(result);
     }
 }

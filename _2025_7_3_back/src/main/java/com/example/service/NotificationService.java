@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface NotificationService {
     List<NotificationWithStatusDTO> getAllNotificationsForCurrentUser(String username);
-
+    List<NotificationDTO> getNotificationsWithReceivers(String senderid);
     Notification createNotification(NotificationDTO notificationDTO);
 
     NotificationReceiver markNotificationAsRead(Long id);

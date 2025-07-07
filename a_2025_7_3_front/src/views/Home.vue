@@ -13,22 +13,47 @@
           active-text-color="#409EFF"
           router
       >
+        <!-- 首页 -->
         <el-menu-item index="/test">
-          <el-icon><Monitor /></el-icon>
+          <el-icon><HomeFilled /></el-icon>
           <span>首页</span>
         </el-menu-item>
-        <el-menu-item index="/todos">
-          <el-icon><DataLine /></el-icon>
-          <span>待办事项</span>
-        </el-menu-item>
-        <el-menu-item index="/notifications">
-          <el-icon><Monitor /></el-icon>
-          <span>通知管理</span>
-        </el-menu-item>
 
+        <!-- 待办事项 -->
+        <el-sub-menu>
+          <template #title>
+            <el-icon><Calendar /></el-icon>
+            <span>待办事项管理</span>
+          </template>
 
+          <el-menu-item index="/todos">
+            <el-icon><List /></el-icon>
+            <span>我的待办</span>
+          </el-menu-item>
 
+          <el-menu-item index="/todos/settime">
+            <el-icon><AlarmClock /></el-icon>
+            <span>定时待办管理</span>
+          </el-menu-item>
+        </el-sub-menu>
 
+        <!-- 通知管理 -->
+        <el-sub-menu index="notifications-group">
+          <template #title>
+            <el-icon><Bell /></el-icon>
+            <span>通知管理</span>
+          </template>
+
+          <el-menu-item index="/notifications/receive">
+            <el-icon><Download /></el-icon>
+            <span>我收到的通知</span>
+          </el-menu-item>
+
+          <el-menu-item index="/notifications/send">
+            <el-icon><Upload /></el-icon>
+            <span>我发出的通知</span>
+          </el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-aside>
 
@@ -84,7 +109,7 @@ import {
   List,
   Document,
   DataLine,
-  Notebook
+  Notebook, Clock, CircleCheck, HomeFilled, Calendar, Bell, Download, Upload, AlarmClock
 } from '@element-plus/icons-vue'
 import {ElMessage} from "element-plus";
 

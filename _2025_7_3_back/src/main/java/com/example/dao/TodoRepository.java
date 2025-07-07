@@ -8,8 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    List<Todo> findByUserid(String userid);
+
     List<Todo>findAllByUserid(String userid);
+
+//    Todo findByid(Long id);
+
 
     // 可以根据需要添加更多查询方法
 //    List<Todo> findByUseridAndStatus(String userid, Todo.TodoStatus status);

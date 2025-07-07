@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.entity.Notification;
 import com.example.entity.User;
+import com.example.entity.dto.NotificationDTO;
 import com.example.entity.dto.NotificationWithStatusDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,6 +29,11 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<NotificationWithStatusDTO> findNotificationsWithStatus(
             @Param("receiverid") String receiverid
     );
+
+
+    List<Notification> findBySenderid(String senderid);
+
+
 //    long countByUseridAndisread(String userid, boolean isread);
 //    long countByisReadAndReceiverid(boolean isread,String userid);
 

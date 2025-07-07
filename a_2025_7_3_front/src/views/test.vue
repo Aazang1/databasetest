@@ -62,17 +62,76 @@
         <el-table-column prop="dueDate" label="截止日期" width="180" />
         <el-table-column label="操作" width="120">
           <template #default="{row}">
-            <el-button size="mini" @click="handleTodoDetail(row)">详情</el-button>
+            <el-button size="mini" @click="openDetailDialog(row.id)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
+    <el-dialog title="待办事项详情" v-model="dialogVisible" width="600px">
+      <el-descriptions
+          v-if="currentDetail"
+          :column="1"
+          border
+          size="large"
+          label-class-name="detail-label"
+      >
+        <el-descriptions-item label="标题">
+          <el-tag type="info" size="large">{{ currentDetail.title }}</el-tag>
+        </el-descriptions-item>
+
+        <el-descriptions-item label="描述">
+          <div class="description-content">{{ currentDetail.description }}</div>
+        </el-descriptions-item>
+
+        <el-descriptions-item label="状态">
+          <el-tag
+              :type="statusTagType(currentDetail.status)"
+              size="large"
+          >
+            {{ currentDetail.status }}
+          </el-tag>
+        </el-descriptions-item>
+
+        <el-descriptions-item label="优先级">
+          <el-tag
+              :type="priorityTagType(currentDetail.priority)"
+              size="large"
+          >
+            {{ currentDetail.priority }}
+          </el-tag>
+        </el-descriptions-item>
+
+        <el-descriptions-item label="截止日期">
+          <el-icon><calendar /></el-icon>
+          {{ formatDate(currentDetail.dueDate) }}
+        </el-descriptions-item>
+
+        <el-descriptions-item label="创建时间">
+          <el-icon><clock /></el-icon>
+          {{ formatDate(currentDetail.createdAt) }}
+        </el-descriptions-item>
+
+        <el-descriptions-item label="更新时间">
+          <el-icon><refresh /></el-icon>
+          {{ formatDate(currentDetail.updatedAt) }}
+        </el-descriptions-item>
+
+        <el-descriptions-item label="用户ID">
+          <el-tag>{{ currentDetail.userid }}</el-tag>
+        </el-descriptions-item>
+      </el-descriptions>
+
+      <template #footer>
+        <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
+
     <!-- 最近通知区域 -->
     <div class="recent-section">
       <div class="section-header">
         <h2>最近通知</h2>
-        <el-link type="primary" :underline="false" @click="$router.push('/notifications')">
+        <el-link type="primary" :underline="false" @click="$router.push('/notifications/receive')">
           查看更多 <i class="el-icon-arrow-right"></i>
         </el-link>
       </div>
@@ -85,7 +144,7 @@
               <p class="notification-time">{{ formatTime(item.createdAt) }}</p>
             </div>
           </div>
-          <el-tag v-if="item.read === false" type="danger" size="mini">未读</el-tag>
+          <el-tag v-if="item.read === false" type="danger" >未读</el-tag>
         </div>
       </div>
     </div>
@@ -98,6 +157,8 @@ import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
 import TodoAPI from '@/api/todo'
 import NotificationAPI from "@/api/notification.js"
+import {ElMessage} from "element-plus";
+import {Calendar, Clock, Refresh} from "@element-plus/icons-vue";
 
 const store = useStore()
 const router = useRouter()
@@ -105,6 +166,32 @@ const recentTodos = ref([])
 const unreadTasks = ref([])
 const recentNotifications = ref([])
 const username = localStorage.getItem('username')
+
+
+// 表格数据 (示例)
+const tableData = ref([
+  { id: 1, name: '测试项目1' },
+  { id: 2, name: '测试项目2' }
+])
+
+// 弹窗控制
+const dialogVisible = ref(false)
+const currentDetail = ref(null)
+
+// 打开详情弹窗
+const openDetailDialog = async (id) => {
+  try {
+    // 从API获取详情
+    const res = await TodoAPI.getTodoDetailById(id)
+    currentDetail.value = res
+    console.log(res)
+    console.log(currentDetail.value)
+    dialogVisible.value = true
+  } catch (error) {
+    console.error('获取详情失败:', error)
+    ElMessage.error('获取详情失败')
+  }
+}
 
 // 统计未完成待办
 const todoCount = computed(() =>
@@ -127,9 +214,38 @@ const formatTime = (timeString) => {
   return date.toLocaleString()
 }
 
-// 处理待办详情
-const handleTodoDetail = (todo) => {
-  router.push(`/todo/${todo.id}`)
+
+const statusTagType = (status) => {
+  const map = {
+    '已完成': 'success',
+    '进行中': 'primary',
+    '待处理': 'warning',
+    '已取消': 'danger'
+  }
+  return map[status] || 'info'
+}
+
+// 优先级标签类型映射
+const priorityTagType = (priority) => {
+  const map = {
+    '高': 'danger',
+    '中': 'warning',
+    '低': 'success'
+  }
+  return map[priority] || 'info'
+}
+
+// 格式化日期函数
+const formatDate = (dateString) => {
+  if (!dateString) return '未设置'
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).replace(/\//g, '-')
 }
 
 onMounted(async () => {
@@ -271,5 +387,26 @@ onMounted(async () => {
   margin: 5px 0 0;
   font-size: 12px;
   color: #909399;
+}
+
+.detail-label {
+  width: 100px;
+  font-weight: bold;
+  background-color: #f5f7fa;
+}
+
+.description-content {
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+:deep(.el-descriptions__body) {
+  background-color: #fff;
+}
+
+:deep(.el-descriptions__header) {
+  margin-bottom: 16px;
 }
 </style>

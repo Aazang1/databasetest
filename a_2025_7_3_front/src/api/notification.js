@@ -9,7 +9,7 @@ const getAllNotifications = async (username) => {
     return response.data
 }
 
-const createNotification = async (notificationData) => {
+export const createNotification = async (notificationData) => {
     const response = await axios.post(API_URL, notificationData)
     return response.data
 }
@@ -19,7 +19,13 @@ const markAsRead = async (id) => {
     return response.data
 }
 
-const deleteNotification = async (id) => {
+
+export const getNotificationsBySender = async (id) => {
+    const response = await axios.get(`${API_URL}/${id}`)
+    return response.data
+}
+
+export const deleteNotification = async (id) => {
     await axios.delete(`${API_URL}/${id}`)
 }
 
@@ -27,5 +33,6 @@ export default {
     getAllNotifications,
     createNotification,
     markAsRead,
-    deleteNotification
+    deleteNotification,
+    getNotificationsBySender
 }

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -34,6 +35,32 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<NotificationWithStatusDTO> getAllNotificationsForCurrentUser(String username) {
         return notificationRepository.findNotificationsWithStatus(username);
+    }
+
+
+    public List<NotificationDTO> getNotificationsWithReceivers(String senderid) {
+        // 1. 查询发送者的所有通知
+        List<Notification> notifications = notificationRepository.findBySenderid(senderid);
+
+        // 2. 为每个通知查询接收者
+        return notifications.stream().map(n -> {
+            NotificationDTO dto = new NotificationDTO();
+            dto.setId(n.getId());
+            dto.setTitle(n.getTitle());
+            dto.setContent(n.getContent());
+            dto.setType(n.getType());
+            dto.setSenderid(n.getSenderid());
+            dto.setCreateAt(n.getCreatedAt());
+
+            // 查询接收者列表
+            List<String> receivers = notificationReceiverRepositroy.findByNotificationid(n.getId())
+                    .stream()
+                    .map(NotificationReceiver::getReceiverid)
+                    .collect(Collectors.toList());
+
+            dto.setReceiverid(receivers);
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 

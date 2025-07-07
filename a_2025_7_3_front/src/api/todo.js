@@ -9,6 +9,11 @@ const getAllTodos = async (username) => {
     return response.data;
 }
 
+const getTodoDetailById = async (id) => {
+    const response = await axios.get(`${API_URL}/${id}`)
+    return response.data
+}
+
 const createTodo = async (todoData) => {
     const response = await axios.post(API_URL, todoData)
     return response.data
@@ -24,6 +29,7 @@ const deleteTodo = async (id) => {
 }
 
 export default {
+    getTodoDetailById,
     getAllTodos,
     createTodo,
     updateTodo,

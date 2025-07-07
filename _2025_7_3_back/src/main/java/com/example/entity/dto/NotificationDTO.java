@@ -1,15 +1,38 @@
 package com.example.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 import java.util.List;
 
 public class NotificationDTO {
+    private Long id;
     private String title;
     private String content;
     private String type;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createAt;
     private String senderid;
+
     private List<String> receiverid;
 
     // getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
     public String getTitle() {
         return title;

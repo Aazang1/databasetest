@@ -1,6 +1,7 @@
 package com.example.controller;
 
 
+import com.example.dao.TodoRepository;
 import com.example.entity.Todo;
 import com.example.service.TodoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +19,9 @@ public class TodoController {
 
     @Autowired
     private TodoService todoService;
+
+    @Autowired
+    private TodoRepository todoRepository;
 
     @GetMapping
     public ResponseEntity<List<Todo>> getAllTodos(@RequestParam String username) {
@@ -43,5 +47,12 @@ public class TodoController {
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         todoService.deleteTodo(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Todo> getTodo(@PathVariable Long id) {
+        Todo todo=todoRepository.findById(id).orElse(null);
+        return ResponseEntity.ok(todo);
+
     }
 }

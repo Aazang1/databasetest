@@ -3,6 +3,8 @@ package com.example.dao;
 import com.example.entity.NotificationReceiver;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationReceiverRepositroy extends JpaRepository<NotificationReceiver, Long> {
+import java.util.List;
 
+public interface NotificationReceiverRepositroy extends JpaRepository<NotificationReceiver, Long> {
+    List<NotificationReceiver> findByNotificationid(Long notificationid);
 }
