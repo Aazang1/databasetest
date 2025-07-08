@@ -12,8 +12,7 @@ import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +29,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private UserService userService;
 
-    LocalDate localDate = LocalDate.now();
-    Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    ZonedDateTime beijingNow = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"));
+    Date date = Date.from(beijingNow.toInstant());
+
+    ZonedDateTime beijingTime = LocalDateTime.now()
+            .atZone(ZoneId.of("Asia/Shanghai"));
     @Override
     public List<NotificationWithStatusDTO> getAllNotificationsForCurrentUser(String username) {
         return notificationRepository.findNotificationsWithStatus(username);
@@ -40,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     public List<NotificationDTO> getNotificationsWithReceivers(String senderid) {
         // 1. 查询发送者的所有通知
-        List<Notification> notifications = notificationRepository.findBySenderid(senderid);
+        List<Notification> notifications = notificationRepository.findBySenderidOrderByCreatedAtDesc(senderid);
 
         // 2. 为每个通知查询接收者
         return notifications.stream().map(n -> {

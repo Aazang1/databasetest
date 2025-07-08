@@ -58,4 +58,12 @@ public class NotificationController {
         List<NotificationDTO> result = notificationService.getNotificationsWithReceivers(senderid);
         return ResponseEntity.ok(result);
     }
+
+
+    @GetMapping("/findnotification/{id}")
+    public ResponseEntity<Notification> getById(@PathVariable Long id) {
+        Notification notification = notificationRepository.findById(id).orElse(null);
+        System.out.println(id);
+        return ResponseEntity.ok(notification);
+    }
 }

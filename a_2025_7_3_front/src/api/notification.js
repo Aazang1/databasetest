@@ -25,6 +25,11 @@ export const getNotificationsBySender = async (id) => {
     return response.data
 }
 
+export const getNotificationsById = async (id) => {
+    const response = await axios.get(`${API_URL}/findnotification/${id}`)
+    return response.data
+}
+
 export const deleteNotification = async (id) => {
     await axios.delete(`${API_URL}/${id}`)
 }
@@ -34,5 +39,6 @@ export default {
     createNotification,
     markAsRead,
     deleteNotification,
-    getNotificationsBySender
+    getNotificationsBySender,
+    getNotificationsById
 }

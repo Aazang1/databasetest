@@ -13,29 +13,26 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-//    List<Notification> findByReceiverid(String userid);
 
     @Query("SELECT n FROM Notification n JOIN NotificationReceiver nr ON n.id = nr.notificationid WHERE nr.receiverid = :receiverid")
     List<Notification> findByReceiverId(@Param("receiverid") String receiverid);
 
 
     @Query("SELECT NEW com.example.entity.dto.NotificationWithStatusDTO(" +
-            "nr.id, n.title, n.content, n.type, n.createdAt, n.senderid, " + // 用nr.id替换n.id
-            "nr.is_read, nr.read_time, n.id) " + // 最后补上n.id用于关联
-            "FROM NotificationReceiver nr " +    // 从nr表开始查询
-            "LEFT JOIN Notification n ON nr.notificationid = n.id " + // 关联通知主表
+            "nr.id, n.title, n.content, n.type, n.createdAt, n.senderid, " +
+            "nr.is_read, nr.read_time, n.id) " +
+            "FROM NotificationReceiver nr " +
+            "LEFT JOIN Notification n ON nr.notificationid = n.id " +
             "WHERE nr.receiverid = :receiverid " +
-            "AND nr.notificationid IS NOT NULL") // 过滤无效关联
+            "AND nr.notificationid IS NOT NULL " +
+            "ORDER BY n.createdAt DESC")  // 添加按创建时间降序排序
     List<NotificationWithStatusDTO> findNotificationsWithStatus(
             @Param("receiverid") String receiverid
     );
 
 
-    List<Notification> findBySenderid(String senderid);
+    List<Notification> findBySenderidOrderByCreatedAtDesc(String senderid);
 
-
-//    long countByUseridAndisread(String userid, boolean isread);
-//    long countByisReadAndReceiverid(boolean isread,String userid);
 
 
 }

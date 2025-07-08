@@ -4,7 +4,7 @@
       <template #header>
         <div class="card-header">
           <span>我发布的通知</span>
-          <el-button type="primary" @click="handleCreate">发布新通知</el-button>
+          <el-button type="primary" @click="showCreateDialog = true">发布通知</el-button>
         </div>
       </template>
 
@@ -43,53 +43,59 @@
 
       <!-- 编辑/创建对话框 -->
       <el-dialog
-          v-model="dialogVisible"
-          :title="isEdit ? '编辑通知' : '发布新通知'"
+          v-model="showCreateDialog"
+          title="发布通知"
           width="50%"
+          :close-on-click-modal="false"
       >
-        <el-form :model="form" label-width="80px">
-          <el-form-item label="通知标题">
-            <el-input v-model="form.title" placeholder="请输入标题"></el-input>
+        <el-form
+            :model="newNotification"
+            :rules="rules"
+            ref="notificationForm"
+            label-width="100px"
+        >
+          <el-form-item label="通知标题" prop="title">
+            <el-input v-model="newNotification.title" placeholder="请输入通知标题" />
           </el-form-item>
-          <el-form-item label="通知类型">
-            <el-select v-model="form.type" placeholder="请选择类型">
-              <el-option label="系统通知" value="系统通知"></el-option>
-              <el-option label="提醒通知" value="提醒通知"></el-option>
-              <el-option label="其他通知" value="其他通知"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="通知内容">
+          <el-form-item label="通知内容" prop="content">
             <el-input
-                v-model="form.content"
+                v-model="newNotification.content"
                 type="textarea"
                 :rows="4"
                 placeholder="请输入通知内容"
-            ></el-input>
+            />
           </el-form-item>
-          <el-form-item label="接收者">
+          <el-form-item label="通知类型" prop="type">
             <el-select
-                v-model="form.receiverid"
+                v-model="newNotification.type"
+                placeholder="请选择通知类型"
+                style="width: 100%"
+            >
+              <el-option label="系统通知" value="系统通知" />
+              <el-option label="提醒通知" value="提醒通知" />
+              <el-option label="公告" value="公告" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="接收人员" prop="receiverIds">
+            <el-select
+                v-model="newNotification.receiverid"
                 multiple
                 filterable
-                allow-create
-                default-first-option
-                placeholder="请输入接收者ID，多个用逗号分隔"
+                placeholder="请选择接收人员"
                 style="width: 100%"
             >
               <el-option
-                  v-for="item in receiverOptions"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-              ></el-option>
+                  v-for="user in userList"
+                  :key="user.id"
+                  :label="user.username"
+                  :value="user.username"
+              />
             </el-select>
           </el-form-item>
         </el-form>
         <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="submitForm">确认</el-button>
-          </span>
+          <el-button @click="showCreateDialog = false">取消</el-button>
+          <el-button type="primary" @click="handleCreate">发布</el-button>
         </template>
       </el-dialog>
 
@@ -106,14 +112,24 @@ import {
   // updateNotification,
   deleteNotification
 } from '@/api/notification'
-
+import NotificationAPI from "@/api/notification.js";
+import UserAPI from '@/api/auth.js'
 const username = localStorage.getItem('username')
 const notifications = ref([])
 const loading = ref(false)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const currentId = ref(null)
+const showCreateDialog = ref(false)
+const newNotification = ref({
+  senderid: username,
+  title: '',
+  content: '',
+  type: '系统通知',
+  receiverid:''
+})
 
+const userList = ref([])
 // 表单数据
 const form = reactive({
   title: '',
@@ -150,13 +166,25 @@ const getTagType = (type) => {
 }
 
 // 创建新通知
-const handleCreate = () => {
-  isEdit.value = false
-  currentId.value = null
-  resetForm()
-  dialogVisible.value = true
-}
+const handleCreate = async () => {
+  try {
+    console.log(newNotification)
+    const res= await NotificationAPI.createNotification(newNotification.value)
+    console.log(res);
+    showCreateDialog.value = false
+    // await fetchNotifications()
+    newNotification.value = {
+      title: '',
+      content: '',
+      type: '系统通知'
+    }
 
+    ElMessage.success("发布成功")
+  } catch (error) {
+    console.error('发布通知失败:', error)
+    ElMessage.error('发布失败')
+  }
+}
 // 编辑通知
 const handleEdit = (row) => {
   isEdit.value = true
@@ -167,7 +195,7 @@ const handleEdit = (row) => {
     content: row.content,
     receiverid: Array.isArray(row.receiverid) ? row.receiverid : []
   })
-  dialogVisible.value = true
+  showCreateDialog.value = true
 }
 
 // 删除通知
@@ -194,6 +222,16 @@ const handleDelete = (row) => {
   })
 }
 
+
+const fetchUsers = async () => {
+  try {
+    const res =  UserAPI.getalluesrs()
+    userList.value =  await  res
+  } catch (error) {
+    console.error('获取用户列表失败:', error)
+    ElMessage.error('获取用户列表失败')
+  }
+}
 // 重置表单
 const resetForm = () => {
   Object.assign(form, {
@@ -238,6 +276,7 @@ const submitForm = async () => {
 
 // 初始化加载数据
 fetchData()
+fetchUsers()
 </script>
 
 <style scoped>

@@ -32,7 +32,7 @@
                 <p class="stat-value" :class="{ 'has-unread': unreadCount > 0 }">
                   {{ unreadCount }}
                 </p>
-                <el-link type="primary" :underline="false" @click="$router.push('/notifications')">
+                <el-link type="primary" :underline="false" @click="$router.push('/notifications/receive')">
                   查看全部 <i class="el-icon-arrow-right"></i>
                 </el-link>
               </div>

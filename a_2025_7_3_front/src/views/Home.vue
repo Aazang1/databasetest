@@ -119,17 +119,7 @@ const router = useRouter()
 // 弹出框相关
 const dialogVisible = ref(false)
 // 选项卡激活状态
-const activeTab = ref('task')
 
-// 获取用户角色
-const userRole = computed(() => {
-  return localStorage.getItem('role') || '未知角色'
-})
-
-// 获取真实姓名
-const realName = computed(() => {
-  return localStorage.getItem('realName') || '管理员'
-})
 
 // 当前激活的菜单
 const activeMenu = computed(() => {

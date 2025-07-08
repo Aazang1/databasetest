@@ -25,7 +25,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<Todo> getAllTodosForCurrentUser(String username) {
-        return todoRepository.findAllByUserid(username);
+        return todoRepository.findAllByUseridOrderByDueDateDesc(username);
     }
 
     @Override
