@@ -11,4 +11,5 @@ public interface TodoService {
     Todo createTodo(Todo todo);
     Todo updateTodo(Long id, Todo todo);
     void deleteTodo(Long id);
+     void checkAndUpdateExpiredTodos();
 }

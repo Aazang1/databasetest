@@ -59,7 +59,12 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="dueDate" label="截止日期" width="180" />
+        <el-table-column prop="dueDate" label="截止日期" width="180">
+          <template #default="scope">
+            {{ formatDate(scope.row.dueDate) }}
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作" width="120">
           <template #default="{row}">
             <el-button size="mini" @click="openDetailDialog(row.id)">详情</el-button>

@@ -21,7 +21,12 @@
                 </template>
               </el-table-column>
               <el-table-column prop="content" label="内容" />
-              <el-table-column prop="createdAt" label="发布时间" width="180" />
+              <el-table-column prop="createdAt" label="发布时间" width="180">
+                <template #default="scope">
+                  {{ formatDate(scope.row.createdAt) }}
+                </template>
+              </el-table-column>
+
               <el-table-column prop="readAt" label="状态" width="120">
                 <template #default="{row}">
                   <el-tag
@@ -253,7 +258,7 @@
           <el-divider direction="vertical" />
           <span class="detail-time">
         <el-icon><Clock /></el-icon>
-        发布时间: {{ formatDateTime(currentNotification.createdAt) }}
+        发布时间: {{ formatDate(currentNotification.createdAt) }}
       </span>
           <el-divider direction="vertical" />
           <el-tag
@@ -527,6 +532,18 @@ const formatDateTime = (dateString) => {
   }).replace(/\//g, '-')
 }
 // 查看详情方法
+
+const formatDate = (dateString) => {
+  if (!dateString) return '未设置'
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).replace(/\//g, '-')
+}
 const showNotificationDetail = async (id) => {
   try {
     loading.value = true

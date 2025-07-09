@@ -9,7 +9,7 @@ public class NotificationWithStatusDTO {
     private String title;
     private String content;
     private String type;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date createdAt;
     private String senderid;
     private boolean isRead;  // 从 notification_receive 表获取

@@ -25,7 +25,7 @@ public class Notification {
     private String type;
 
     @Column(name = "created_at", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date createdAt;
     @JoinColumn(name = "senderid", nullable = false)
     private String senderid;

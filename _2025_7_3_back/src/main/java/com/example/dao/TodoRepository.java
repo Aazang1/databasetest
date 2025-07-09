@@ -5,11 +5,15 @@ import com.example.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     List<Todo> findAllByUseridOrderByDueDateDesc(String userid);
+
+
+    List<Todo> findByDueDateBeforeAndStatusNot(Date dueDate, String status);
 
 //    Todo findByid(Long id);
 

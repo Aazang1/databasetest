@@ -8,6 +8,7 @@ import com.example.service.TodoService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -58,5 +59,22 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
         todoRepository.delete(todo);
+    }
+
+
+    @Transactional
+    public void checkAndUpdateExpiredTodos() {
+        Date now = new Date();
+        // 查找所有截止日期已过且状态不是"已完成"的待办事项
+        List<Todo> expiredTodos = todoRepository.findByDueDateBeforeAndStatusNot(now, "已完成");
+
+        expiredTodos.forEach(todo -> {
+            if (!"已过期".equals(todo.getStatus())) {
+                todo.setStatus("已过期");
+                todo.setUpdatedAt(new Date()); // 更新修改时间
+            }
+        });
+
+        todoRepository.saveAll(expiredTodos); // 批量更新
     }
 }

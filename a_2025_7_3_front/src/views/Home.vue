@@ -18,7 +18,6 @@
           <el-icon><HomeFilled /></el-icon>
           <span>首页</span>
         </el-menu-item>
-
         <!-- 待办事项 -->
         <el-sub-menu>
           <template #title>
@@ -99,13 +98,6 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
-  Monitor,
-  Tools,
-  Warning,
-  ArrowUp,
-  Search,
-  Setting,
-  Check,
   List,
   Document,
   DataLine,
@@ -120,7 +112,7 @@ const router = useRouter()
 const dialogVisible = ref(false)
 // 选项卡激活状态
 
-
+const username = localStorage.getItem('username');
 // 当前激活的菜单
 const activeMenu = computed(() => {
   // 根据查询参数设置不同的激活菜单

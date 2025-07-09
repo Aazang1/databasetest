@@ -74,10 +74,13 @@
               <div class="sort-header">
                 <span>截止日期</span>
                 <div class="sort-icons">
-                  <el-icon @click="sortBy('dueDate', 'asc')"><CaretTop /></el-icon>
-                  <el-icon @click="sortBy('dueDate', 'desc')"><CaretBottom /></el-icon>
+                  <el-icon @click.stop="sortBy('dueDate', 'asc')"><CaretTop /></el-icon>
+                  <el-icon @click.stop="sortBy('dueDate', 'desc')"><CaretBottom /></el-icon>
                 </div>
               </div>
+            </template>
+            <template #default="scope">
+              {{ formatDate(scope.row.dueDate) }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="250" align="center">
