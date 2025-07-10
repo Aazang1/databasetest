@@ -258,7 +258,11 @@ onMounted(() => {
 const fetchTasks = async () => {
   loading.value = true
   try {
-    const response = await axios.get('/scheduled-tasks')
+    const response = await axios.get('/scheduled-tasks', {
+      params: {
+        userid: username // 替换成实际的用户ID
+      }
+    });
     tasks.value = response.data
   } catch (error) {
     ElMessage.error('获取任务列表失败: ' + error.message)

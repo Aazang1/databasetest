@@ -21,10 +21,18 @@ const getalluesrs = async () => {
     return response.data
 }
 
+const getusers = async (username) => {
+    const response = await axios.get(`${API_URL}/user`, {
+        params: { username }  // 作为查询参数传递
+    });
+    return response.data
+}
+
 
 export default {
     register,
     login,
     logout,
-    getalluesrs
+    getalluesrs,
+    getusers
 }

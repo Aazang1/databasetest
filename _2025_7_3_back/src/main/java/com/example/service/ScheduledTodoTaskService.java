@@ -49,8 +49,8 @@ public class ScheduledTodoTaskService {
         return savedTask;
     }
 
-    public List<ScheduledTodoTask> getAllTasks() {
-        return taskRepository.findAll();
+    public List<ScheduledTodoTask> getAllTasks(String userid) {
+        return taskRepository.findAllByUserId(userid);
     }
 
     public ScheduledTodoTask getTaskById(Long id) {

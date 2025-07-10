@@ -55,14 +55,14 @@ public class UserServiceImpl implements UserService {
     public String login(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return "error+用户不存在";
+            return "用户不存在";
         }
 
         if (!user.getPassword().equals(password)) {
-            return "error";
+            return "密码错误";
         }
         else{
-            return "success";
+            return "登录成功";
         }
     }
 

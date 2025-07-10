@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <h1 class="welcome-title">欢迎回来, {{ username }}</h1>
+    <h1 class="welcome-title">欢迎回来, {{ name }}</h1>
 
     <!-- 统计卡片区域 -->
     <div class="stats-container">
@@ -171,6 +171,7 @@ const recentTodos = ref([])
 const unreadTasks = ref([])
 const recentNotifications = ref([])
 const username = localStorage.getItem('username')
+const name = localStorage.getItem('name')
 
 
 // 表格数据 (示例)

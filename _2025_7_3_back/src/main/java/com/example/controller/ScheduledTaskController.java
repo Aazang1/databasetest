@@ -21,8 +21,8 @@ public class ScheduledTaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduledTodoTask>> getAllTasks() {
-        return ResponseEntity.ok(taskService.getAllTasks());
+    public ResponseEntity<List<ScheduledTodoTask>> getAllTasks(@RequestParam String userid) {
+        return ResponseEntity.ok(taskService.getAllTasks(userid));
     }
 
     @GetMapping("/{id}")

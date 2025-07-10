@@ -15,4 +15,5 @@ public interface ScheduledTodoTaskRepository extends JpaRepository<ScheduledTodo
     @Modifying
     @Query("UPDATE ScheduledTodoTask t SET t.active = :active, t.updatedAt = CURRENT_TIMESTAMP WHERE t.id = :id")
     void updateActiveStatus(Long id, Boolean active);
+    List<ScheduledTodoTask> findAllByUserId(String userId);
 }

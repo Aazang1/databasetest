@@ -15,9 +15,25 @@ public class NotificationDTO {
     private String senderid;
 
     private List<String> receiverid;
-
+    private String senderName;
     // getters and setters
+    private List<String> receiverNames;
 
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public List<String> getReceiverNames() {
+        return receiverNames;
+    }
+
+    public void setReceiverNames(List<String> receiverNames) {
+        this.receiverNames = receiverNames;
+    }
     public Long getId() {
         return id;
     }

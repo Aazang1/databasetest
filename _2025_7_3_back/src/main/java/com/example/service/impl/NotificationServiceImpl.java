@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.dao.NotificationReceiverRepositroy;
 import com.example.dao.NotificationRepository;
+import com.example.dao.UserRepository;
 import com.example.entity.Notification;
 import com.example.entity.dto.NotificationDTO;
 import com.example.entity.NotificationReceiver;
@@ -13,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +28,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     ZonedDateTime beijingNow = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"));
     Date date = Date.from(beijingNow.toInstant());
@@ -44,23 +47,48 @@ public class NotificationServiceImpl implements NotificationService {
         // 1. 查询发送者的所有通知
         List<Notification> notifications = notificationRepository.findBySenderidOrderByCreatedAtDesc(senderid);
 
-        // 2. 为每个通知查询接收者
+        // 2. 收集所有接收者ID
+        Set<String> allReceiverIds = new HashSet<>();
+        notifications.forEach(n -> {
+            List<NotificationReceiver> receivers = notificationReceiverRepositroy.findByNotificationid(n.getId());
+            receivers.forEach(r -> allReceiverIds.add(r.getReceiverid()));
+        });
+
+        // 3. 批量查询接收者姓名
+        Map<String, String> receiverIdToNameMap = new HashMap<>();
+        if (!allReceiverIds.isEmpty()) {
+            List<User> receivers = userRepository.findByUsernameIn(allReceiverIds);
+            receivers.forEach(u -> receiverIdToNameMap.put(u.getUsername(), u.getName()));
+        }
+
+        // 4. 查询发送者姓名
+        User sender = userRepository.findByUsername(senderid);
+        String senderName = sender != null ? sender.getName() : "未知用户";
+
+        // 5. 转换为DTO
         return notifications.stream().map(n -> {
             NotificationDTO dto = new NotificationDTO();
             dto.setId(n.getId());
             dto.setTitle(n.getTitle());
             dto.setContent(n.getContent());
             dto.setType(n.getType());
-            dto.setSenderid(n.getSenderid());
             dto.setCreateAt(n.getCreatedAt());
+            dto.setSenderid(n.getSenderid());
+            dto.setSenderName(senderName);
 
             // 查询接收者列表
-            List<String> receivers = notificationReceiverRepositroy.findByNotificationid(n.getId())
+            List<String> receiverIds = notificationReceiverRepositroy.findByNotificationid(n.getId())
                     .stream()
                     .map(NotificationReceiver::getReceiverid)
                     .collect(Collectors.toList());
+            dto.setReceiverid(receiverIds);
 
-            dto.setReceiverid(receivers);
+            // 设置接收者姓名
+            List<String> receiverNames = receiverIds.stream()
+                    .map(id -> receiverIdToNameMap.getOrDefault(id, "未知用户"))
+                    .collect(Collectors.toList());
+            dto.setReceiverNames(receiverNames);
+
             return dto;
         }).collect(Collectors.toList());
     }

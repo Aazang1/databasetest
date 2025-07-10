@@ -17,13 +17,13 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="senderid" label="发送者" width="120" />
+        <el-table-column prop="senderName" label="发送者" width="120" />
         <el-table-column prop="content" label="内容" width="200" />
         <el-table-column label="接收者">
           <template #default="{row}">
-            <template v-if="row.receiverid && row.receiverid.length > 0">
+            <template v-if="row.receiverNames && row.receiverNames.length > 0">
               <el-tag
-                  v-for="receiver in row.receiverid"
+                  v-for="receiver in row.receiverNames"
                   :key="receiver"
                   class="receiver-tag"
               >
@@ -87,7 +87,7 @@
               <el-option
                   v-for="user in userList"
                   :key="user.id"
-                  :label="user.username"
+                  :label="user.name"
                   :value="user.username"
               />
             </el-select>

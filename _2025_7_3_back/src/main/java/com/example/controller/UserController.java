@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dao.UserRepository;
 import com.example.entity.User;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
@@ -56,6 +60,12 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers() {
         List<User> users=userService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getUser(@RequestParam("username") String username) {
+        User user = userRepository.findByUsername(username);
+        return ResponseEntity.ok(user);
     }
 
 }

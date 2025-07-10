@@ -16,6 +16,7 @@ public class NotificationWithStatusDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date readTime;   // 从 notification_receive 表获取
     private Long notificationId;
+    private String senderName;
     // 构造方法（用于JPQL）
     public NotificationWithStatusDTO(
             Long id, String title, String content, String type,
@@ -33,6 +34,13 @@ public class NotificationWithStatusDTO {
         this.notificationId = notificationId;
     }
 
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
 
     public Long getId() {
         return id;

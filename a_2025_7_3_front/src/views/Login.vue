@@ -61,6 +61,7 @@ const store = useStore()
 const router = useRouter()
 const loginForm = ref(null)
 const loading = ref(false)
+const res =ref({})
 
 const form = ref({
   username: '',
@@ -77,26 +78,38 @@ const rules = {
 }
 
 const handleLogin = async () => {
-  try {
     await loginForm.value.validate()
     loading.value = true
-    const token = await AuthAPI.login(form.value)
-    store.commit('setToken', token)
-
-
+    const res = await AuthAPI.login(form.value)
+    console.log(res)
 
     localStorage.setItem('username', form.value.username)
     localStorage.setItem('password', form.value.password)
+
+  if(res==="登录成功") {
     ElMessage.success("登录成功")
+    const response =await  AuthAPI.getusers(form.value.username)
+    localStorage.setItem('name', response.name)
+    console.log(response)
 
     await router.push('/test')
-  } catch (error) {
-    console.error('登录失败:', error)
-    ElMessage.success("失败"+error)
-  } finally {
-    loading.value = false
   }
+  else if(res==="用户不存在")
+  {
+    ElMessage.error("用户不存在")
+
+  }
+  else
+  {
+    ElMessage.error("密码错误")
+
+  }
+
+
+
 }
+
+
 </script>
 
 <style scoped>

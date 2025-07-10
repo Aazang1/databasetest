@@ -1,9 +1,37 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/shujukutest
+#    username: root
+#    password: 123456
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#        format_sql: true
+#  jackson:
+#    deserialization:
+#      adjust-dates-to-context-time-zone: false
+#    serialization:
+#      write-dates-as-timestamps: false
+#    time-zone: Asia/Shanghai
+#    date-format: yyyy-MM-dd'T'HH:mm:ss
+#
+#server:
+#  port: 8080
+
+
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/shujukutest
-    username: root
-    password: 123456
+    url: jdbc:mysql://localhost:2881/shujukutest
+    username: root@test
+    password: AAaa123456!!
   jpa:
     database-platform: org.hibernate.dialect.MySQL8InnoDBDialect
     show-sql: true
@@ -23,3 +51,4 @@ spring:
 
 server:
   port: 8080
+
